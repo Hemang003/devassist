@@ -1,0 +1,13 @@
+{
+  "name": "devassist-aggregate-stats",
+  "version": "1.0.0",
+  "description": "Nightly usage aggregation Lambda for DevAssist.",
+  "main": "aggregate_stats.js",
+  "author": "Hemang Parmar",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.645.0",
+    "pg": "^8.12.0"
+  }
+}

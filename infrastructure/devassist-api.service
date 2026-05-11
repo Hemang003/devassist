@@ -1,0 +1,29 @@
+# Copyright (c) 2024 Hemang Parmar
+#
+# systemd unit for the DevAssist API container. Reads runtime config from
+# /opt/devassist/.env. Restart-on-failure with a generous backoff.
+
+[Unit]
+Description=DevAssist API
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=/opt/devassist/.env
+ExecStartPre=-/usr/bin/docker rm -f devassist-api
+ExecStart=/usr/bin/docker run \
+  --rm \
+  --name devassist-api \
+  --env-file /opt/devassist/.env \
+  -p 4000:4000 \
+  --log-driver json-file --log-opt max-size=10m --log-opt max-file=3 \
+  devassist-api:current
+ExecStop=/usr/bin/docker stop -t 10 devassist-api
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=60s
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target

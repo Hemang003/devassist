@@ -1,0 +1,173 @@
+# Copyright (c) 2024 Hemang Parmar
+#
+# DevAssist CI/CD pipeline.
+#
+# Pull request:
+#   • lint, format check, type check, tests (backend + frontend)
+#
+# Push to main:
+#   • all of the above
+#   • build the API Docker image, push to ECR
+#   • SSH into the EC2 host and run infrastructure/deploy.sh for a rolling restart
+
+name: ci-cd
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  NODE_VERSION: 20
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: devassist-api
+
+jobs:
+  backend:
+    name: Backend lint + test
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci || npm install --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npx tsc --noEmit
+      - run: npm run test:coverage
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgres://test:test@localhost:5432/test
+          REDIS_URL: redis://localhost:6379/15
+          JWT_SECRET: test-secret-must-be-at-least-sixteen-chars
+          AI_ENGINE_API_KEY: test-engine-key
+          AI_ENGINE_MODEL: test-engine-model
+          S3_BUCKET: devassist-test
+          SES_FROM_EMAIL: no-reply@devassist.test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-coverage
+          path: backend/coverage
+
+  frontend:
+    name: Frontend lint + build
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci || npm install --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run build
+
+  build-and-deploy:
+    name: Build image + deploy
+    needs: [backend, frontend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push API image
+        id: build
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -f docker/backend.Dockerfile \
+            -t "${REGISTRY}/${ECR_REPOSITORY}:${TAG}" \
+            -t "${REGISTRY}/${ECR_REPOSITORY}:latest" \
+            .
+          docker push "${REGISTRY}/${ECR_REPOSITORY}:${TAG}"
+          docker push "${REGISTRY}/${ECR_REPOSITORY}:latest"
+          echo "image_tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Sync deploy scripts to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "infrastructure/deploy.sh,infrastructure/devassist-api.service,infrastructure/.env.production.example"
+          target: "/tmp/devassist-deploy"
+          strip_components: 1
+
+      - name: Run rolling deploy on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: APP_TAG,ECR_REGISTRY,AWS_REGION
+          script_stop: true
+          script: |
+            export APP_TAG="${{ steps.build.outputs.image_tag }}"
+            export ECR_REGISTRY="${{ steps.ecr.outputs.registry }}"
+            export AWS_REGION="${{ env.AWS_REGION }}"
+            chmod +x /tmp/devassist-deploy/deploy.sh
+            /tmp/devassist-deploy/deploy.sh
+
+      - name: Update Lambda function code
+        run: |
+          cd infrastructure/lambda
+          ./build.sh
+          aws lambda update-function-code \
+            --function-name devassist-aggregate-stats \
+            --zip-file fileb://aggregate_stats.zip \
+            --region "${AWS_REGION}" \
+            >/dev/null

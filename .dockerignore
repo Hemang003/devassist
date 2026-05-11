@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/build
+**/.git
+**/.github
+**/coverage
+**/.env
+**/.env.*
+!**/.env.example
+**/*.log
+**/.DS_Store
+infrastructure/lambda/*.zip

@@ -1,0 +1,13 @@
+{
+  "_comment": "EventBridge rule that fires the aggregate_stats Lambda nightly at 03:15 UTC.",
+  "Name": "devassist-nightly-aggregate",
+  "Description": "Run DevAssist daily usage aggregation",
+  "ScheduleExpression": "cron(15 3 * * ? *)",
+  "State": "ENABLED",
+  "Targets": [
+    {
+      "Id": "devassist-aggregate-stats",
+      "Arn": "arn:aws:lambda:REGION:ACCOUNT_ID:function:devassist-aggregate-stats"
+    }
+  ]
+}

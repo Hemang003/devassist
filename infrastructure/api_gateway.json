@@ -1,0 +1,40 @@
+{
+  "_comment": "OpenAPI 3.0 spec for the API Gateway-fronted public status endpoints. Import via `aws apigatewayv2 import-api`.",
+  "openapi": "3.0.1",
+  "info": {
+    "title": "DevAssist Status",
+    "version": "1.0.0",
+    "description": "Public health and status surface for the DevAssist platform."
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Liveness probe",
+        "responses": { "200": { "description": "OK" } },
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "httpMethod": "GET",
+          "uri": "https://api.devassist.example.com/api/health",
+          "passthroughBehavior": "when_no_match",
+          "payloadFormatVersion": "1.0"
+        }
+      }
+    },
+    "/api/status": {
+      "get": {
+        "summary": "Deep readiness check",
+        "responses": {
+          "200": { "description": "All dependencies healthy" },
+          "503": { "description": "One or more dependencies degraded" }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "httpMethod": "GET",
+          "uri": "https://api.devassist.example.com/api/status",
+          "passthroughBehavior": "when_no_match",
+          "payloadFormatVersion": "1.0"
+        }
+      }
+    }
+  }
+}

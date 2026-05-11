@@ -1,0 +1,85 @@
+# Copyright (c) 2024 Hemang Parmar
+#
+# Local development stack. Run from the repo root:
+#   cp .env.example .env  # then fill in AI_ENGINE_API_KEY
+#   docker compose -f docker/docker-compose.yml --env-file .env up --build
+#
+# Postgres and Redis stand in for RDS and ElastiCache in production.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: devassist
+      POSTGRES_PASSWORD: devassist
+      POSTGRES_DB: devassist
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devassist"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      LOG_LEVEL: ${LOG_LEVEL:-debug}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TTL: ${JWT_ACCESS_TTL:-15m}
+      JWT_REFRESH_TTL: ${JWT_REFRESH_TTL:-30d}
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+      DATABASE_URL: postgres://devassist:devassist@postgres:5432/devassist
+      REDIS_URL: redis://redis:6379
+      AI_ENGINE_API_KEY: ${AI_ENGINE_API_KEY}
+      AI_ENGINE_MODEL: ${AI_ENGINE_MODEL}
+      AI_ENGINE_MAX_TOKENS: ${AI_ENGINE_MAX_TOKENS:-4096}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      S3_BUCKET: ${S3_BUCKET:-devassist-history-dev}
+      SES_FROM_EMAIL: ${SES_FROM_EMAIL:-no-reply@devassist.local}
+      CLOUDWATCH_LOG_GROUP: ${CLOUDWATCH_LOG_GROUP:-/devassist/api}
+      CLOUDWATCH_LOG_STREAM: ${CLOUDWATCH_LOG_STREAM:-local}
+      RATE_LIMIT_AI_PER_MIN: ${RATE_LIMIT_AI_PER_MIN:-20}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    # First boot waits on Postgres, then runs migrations before starting.
+    command: sh -c "node dist/db/migrate.js && node dist/server.js"
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+volumes:
+  postgres-data:
+  redis-data:

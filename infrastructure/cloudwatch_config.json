@@ -1,0 +1,66 @@
+{
+  "_comment": "CloudWatch log group + metric filter setup applied via `aws logs ...` calls in CI bootstrap.",
+  "logGroups": [
+    {
+      "logGroupName": "/devassist/api",
+      "retentionInDays": 30,
+      "tags": { "app": "devassist", "component": "api" }
+    },
+    {
+      "logGroupName": "/aws/lambda/devassist-aggregate-stats",
+      "retentionInDays": 60,
+      "tags": { "app": "devassist", "component": "aggregate-stats" }
+    }
+  ],
+  "metricFilters": [
+    {
+      "filterName": "ApiErrorRate",
+      "logGroupName": "/devassist/api",
+      "filterPattern": "{ ($.level = \"error\") }",
+      "metricTransformations": [
+        {
+          "metricName": "ApiErrors",
+          "metricNamespace": "DevAssist/API",
+          "metricValue": "1"
+        }
+      ]
+    },
+    {
+      "filterName": "EngineCallsCounter",
+      "logGroupName": "/devassist/api",
+      "filterPattern": "{ $.message = \"engine completion finished\" }",
+      "metricTransformations": [
+        {
+          "metricName": "EngineCalls",
+          "metricNamespace": "DevAssist/API",
+          "metricValue": "1"
+        }
+      ]
+    },
+    {
+      "filterName": "RateLimitHits",
+      "logGroupName": "/devassist/api",
+      "filterPattern": "{ ($.status = 429) }",
+      "metricTransformations": [
+        {
+          "metricName": "RateLimitHits",
+          "metricNamespace": "DevAssist/API",
+          "metricValue": "1"
+        }
+      ]
+    }
+  ],
+  "alarms": [
+    {
+      "alarmName": "DevAssist-HighErrorRate",
+      "metricName": "ApiErrors",
+      "namespace": "DevAssist/API",
+      "statistic": "Sum",
+      "period": 300,
+      "evaluationPeriods": 2,
+      "threshold": 25,
+      "comparisonOperator": "GreaterThanThreshold",
+      "alarmDescription": "More than 25 API errors in 5 minutes — investigate."
+    }
+  ]
+}
