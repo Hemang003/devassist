@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Side-by-side diff using diff2html. Used by the Bug Fixer to show
  * original vs fixed.

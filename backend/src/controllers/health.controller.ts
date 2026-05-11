@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Health and status endpoints. `/health` is a cheap liveness probe (used by
  * the EC2 systemd unit and the ALB). `/status` does a deeper readiness check

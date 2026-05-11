@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Express application factory. Kept separate from `server.ts` so the tests
  * can construct the app without binding a port.

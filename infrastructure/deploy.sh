@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2024 Hemang Parmar
+# Copyright (c) 2026 Hemang Parmar
 #
 # Provisions a fresh Ubuntu 22.04 EC2 instance for DevAssist.
 #

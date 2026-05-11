@@ -1,7 +1,7 @@
 # DevAssist — AI Developer Productivity Platform
 
 > Author: **Hemang Parmar**
-> License: MIT — © 2024 Hemang Parmar
+> License: MIT — © 2026 Hemang Parmar
 
 DevAssist is a full-stack web platform that gives developers a single workspace
 for the most common kinds of code work: structured review, plain-English
@@ -281,4 +281,4 @@ so the client UX is identical to a live call.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Copyright © 2024 Hemang Parmar.
+MIT — see [LICENSE](LICENSE). Copyright © 2026 Hemang Parmar.

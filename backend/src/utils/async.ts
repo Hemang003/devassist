@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Tiny wrapper to forward async handler rejections into Express's error
  * middleware. Saves us from repeating try/catch in every controller.

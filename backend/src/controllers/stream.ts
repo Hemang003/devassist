@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Shared streaming machinery for the AI-engine routes. Encapsulates:
  *   1. SSE headers + heartbeat,

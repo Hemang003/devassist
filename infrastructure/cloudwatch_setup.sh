@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2024 Hemang Parmar
+# Copyright (c) 2026 Hemang Parmar
 #
 # Reads cloudwatch_config.json and applies it via the AWS CLI. Idempotent.
 

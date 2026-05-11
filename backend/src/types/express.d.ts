@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Augment Express's Request so authenticated middleware can attach the user
  * without each handler casting through `any`.

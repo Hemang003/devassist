@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2024 Hemang Parmar
+# Copyright (c) 2026 Hemang Parmar
 #
 # Bundles the aggregation Lambda into a deploy-ready zip.
 

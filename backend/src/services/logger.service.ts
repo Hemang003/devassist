@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Structured JSON logging via Winston. Console transport for local dev,
  * CloudWatch transport when AWS credentials are present so production logs

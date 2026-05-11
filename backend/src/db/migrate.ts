@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Lightweight migration runner. Reads SQL files from ./migrations in lexical
  * order and applies any that have not yet been recorded in `_migrations`.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Socket.io is used for ambient real-time concerns: in-app notifications
  * (e.g. "your refactor finished"), live dashboard updates when a long-running

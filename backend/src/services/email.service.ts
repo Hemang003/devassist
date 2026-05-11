@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Transactional email via AWS SES. Two flows for now: signup welcome and the
  * weekly digest fired by the nightly aggregation Lambda.

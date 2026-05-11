@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Common page layout for the five AI features: title, description, controls
  * column, code editor, output panel. Each feature page only supplies its

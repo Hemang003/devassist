@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Postgres connection pool. Single shared pool per process — never instantiate
  * `new Pool()` ad-hoc, always import this module so we honour the `max` cap.

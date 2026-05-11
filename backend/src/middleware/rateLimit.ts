@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Per-user rate limit for AI engine calls. Uses Redis as the backing store so
  * counters survive a single-process restart and shard across replicas. Falls

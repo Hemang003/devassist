@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Auth primitives: password hashing, JWT issue/verify, refresh token rotation.
  * Refresh tokens are stored hashed — a DB leak should not yield usable tokens.

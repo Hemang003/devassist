@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Streaming client for the SSE-based AI endpoints. We use `fetch` with a
  * `ReadableStream` reader rather than `EventSource` because:

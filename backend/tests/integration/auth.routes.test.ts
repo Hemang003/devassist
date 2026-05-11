@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Auth route integration tests with the Postgres / Redis layers mocked so the
  * suite can run in pure CI without external services.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Production entry point. Boots the HTTP server, attaches websockets, wires
  * graceful shutdown to release Postgres / Redis cleanly.

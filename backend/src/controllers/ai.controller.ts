@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Thin glue layer between validated request payloads and the streaming
  * machinery. Adding a new feature is: write a prompt, add a schema, add a

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Wraps the SSE client in a React-friendly state machine. Components only
  * need `state`, `output`, and `start()`; cancellation is automatic on unmount

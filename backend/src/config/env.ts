@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Centralised, typed access to environment variables. Validate once at boot
  * so a missing secret blows up immediately instead of mid-request.

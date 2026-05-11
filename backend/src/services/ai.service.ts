@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Single point of contact with the AI engine. All feature controllers go
  * through `streamCompletion` so streaming, retries, telemetry and token

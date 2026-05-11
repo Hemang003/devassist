@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Renders streaming AI output with a tasteful caret while in flight. The text
  * is shown verbatim as Markdown (we keep this simple — `pre`/`code` blocks

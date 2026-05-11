@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Hemang Parmar
+# Copyright (c) 2026 Hemang Parmar
 #
 # Local development stack. Run from the repo root:
 #   cp .env.example .env  # then fill in AI_ENGINE_API_KEY

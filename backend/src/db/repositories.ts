@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Thin data-access layer. Keeps SQL out of controllers and gives services a
  * stable surface to depend on.

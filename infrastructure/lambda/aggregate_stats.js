@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Nightly aggregation Lambda. Triggered by an EventBridge cron rule
  * (rate(1 day) at 03:15 UTC). Walks every active user in RDS, sums their

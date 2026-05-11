@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2024 Hemang Parmar
+# Copyright (c) 2026 Hemang Parmar
 #
 # Creates the DevAssist S3 bucket with the policies we rely on in production:
 #   • Block public access (required — these are user code snippets)

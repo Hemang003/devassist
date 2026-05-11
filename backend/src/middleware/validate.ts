@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Hemang Parmar
+ * Copyright (c) 2026 Hemang Parmar
  *
  * Generic Zod request validator. Use one validator per route; we get typed
  * bodies for free downstream.
