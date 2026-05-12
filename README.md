@@ -36,6 +36,12 @@ GitHub Actions pipeline that ships changes to EC2 with zero downtime.
 
 ---
 
+## Screenshots
+
+![DevAssist Dashboard](docs/screenshots/dashboard.png)
+
+---
+
 ## Architecture
 
 ```mermaid
